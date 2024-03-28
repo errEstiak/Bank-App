@@ -63,18 +63,18 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
-
+// ============= DISPLAY MOVEMENTS =================
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
   movements.forEach((movs, i) => {
     const type = movs > 0 ? 'deposit' : 'withdrawal';
     const html = `
     <div class="movements__row">
-      <div class="movements__type movements__type--${type}">${
+    <div class="movements__type movements__type--${type}">${
       i + 1
     }. ${type}</div>
-      <div class="movements__date">3 days ago</div>
-      <div class="movements__value">${Math.abs(movs)}</div>
+    <div class="movements__date">3 days ago</div>
+    <div class="movements__value">${Math.abs(movs)}</div>
     </div>`;
 
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -82,6 +82,11 @@ const displayMovements = function (movements) {
 };
 
 displayMovements(account1.movements);
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
+// ============= CREATING USERNAME =================
 
 // First we create this basic function to make a username
 // const createUserName = function (acc) {
@@ -94,20 +99,35 @@ displayMovements(account1.movements);
 // };
 // console.log(createUserName('Estiak Dewan Emon'));
 
-// now we will dinamically use this function to passs into the accounts array & creating a username property inside each account object
+// now we can dinamically use this function to passs into the accounts array & creating a username property inside each account object
 
 const createUserName = function (accs) {
   accs.forEach(function (acc) {
     acc.username = acc.owner //creating username property & implementing on owner property
       .toLowerCase()
       .split(' ')
-      .map(name => name[0])
+      .map(name => name[0]) // this map method creating a new array without mutating the original
       .join('');
   });
 };
 
 createUserName(accounts);
-console.log(accounts);
+// console.log(accounts);
+/////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
+// ============= DISPLAY TOTAL BALANCE =================
+
+const displayTotalBalance = function (movements) {
+  const balance = movements.reduce(function (acc, mov) {
+    return acc + mov;
+  }, 0);
+  labelBalance.textContent = `${balance} €`;
+};
+
+displayTotalBalance(account1.movements);
+/////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
