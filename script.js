@@ -74,7 +74,7 @@ const displayMovements = function (movements) {
       i + 1
     }. ${type}</div>
       <div class="movements__date">3 days ago</div>
-      <div class="movements__value">${movs}</div>
+      <div class="movements__value">${Math.abs(movs)}</div>
     </div>`;
 
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -82,6 +82,17 @@ const displayMovements = function (movements) {
 };
 
 displayMovements(account1.movements);
+
+
+const createUserName = function (acc) {
+  const userName = acc
+    .toLowerCase()
+    .split(' ')
+    .map(name => name[0])
+    .join(''); // do the chaining one by one to grasp the situation
+    return userName;
+};
+console.log(createUserName('Estiak Dewan Emon'));
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
