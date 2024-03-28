@@ -13,7 +13,7 @@ const account1 = {
 };
 
 const account2 = {
-  owner: 'Jessica Davis',
+  owner: 'Estiak Dewan',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
@@ -83,16 +83,31 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+// First we create this basic function to make a username
+// const createUserName = function (acc) {
+//   const userName = acc
+//     .toLowerCase()
+//     .split(' ')
+//     .map(name => name[0])
+//     .join(''); // do the chaining one by one to grasp the situation
+//     return userName;
+// };
+// console.log(createUserName('Estiak Dewan Emon'));
 
-const createUserName = function (acc) {
-  const userName = acc
-    .toLowerCase()
-    .split(' ')
-    .map(name => name[0])
-    .join(''); // do the chaining one by one to grasp the situation
-    return userName;
+// now we will dinamically use this function to passs into the accounts array & creating a username property inside each account object
+
+const createUserName = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner //creating username property & implementing on owner property
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
 };
-console.log(createUserName('Estiak Dewan Emon'));
+
+createUserName(accounts);
+console.log(accounts);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
