@@ -103,7 +103,7 @@ const displayMovements = function (movements) {
 
 const createUserName = function (accs) {
   accs.forEach(function (acc) {
-    acc.username = acc.owner //creating username property & implementing on owner property
+    acc.username = acc.owner //creating username variable & implementing on owner property
       .toLowerCase()
       .split(' ')
       .map(name => name[0]) // this map method creating a new array without mutating the original
