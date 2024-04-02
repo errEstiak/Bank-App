@@ -186,6 +186,13 @@ btnLogin.addEventListener('click', function (e) {
     // at first the app class opacity will be 0
     // but after a successful log in it will show the user interface
     containerApp.style.opacity = 100;
+
+    // Display Movements
+    displayMovements(currentAccout.movements);
+    // Display Balance
+    displayTotalBalance(currentAccout.movements);
+    // Display Summary
+    calcDisplaySummary(currentAccout.movements);
   }
 });
 
