@@ -81,7 +81,7 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 // -------------------------------------------
 
 /////////////////////////////////////////////////
@@ -119,13 +119,13 @@ createUserName(accounts);
 /////////////////////////////////////////////////
 // ============= DISPLAY Summary =================
 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes} €`;
 
-  const withdraw = movements
+  const withdraw = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(withdraw)} €`;
@@ -134,9 +134,9 @@ const calcDisplaySummary = function (movements) {
   // suppose bank add an condition recently on interest rate
   // only if an interest that is bigger than one than it will be added to the total value
   // so where should we add this in the chai? (yes the ans is in between where we calculating and adding the interest rate)
-  const interest = movements
+  const interest = acc.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((interest, i, arr) => {
       // console.log(arr); // check out the array for debugging / understanding this part
       return interest >= 1;
@@ -146,7 +146,7 @@ const calcDisplaySummary = function (movements) {
   labelSumInterest.textContent = `${interest} €`;
 };
 
-calcDisplaySummary(account1.movements);
+// calcDisplaySummary(account1.movements);
 // -------------------------------------------
 
 /////////////////////////////////////////////////
@@ -160,7 +160,7 @@ const displayTotalBalance = function (movements) {
   labelBalance.textContent = `${balance} €`;
 };
 
-displayTotalBalance(account1.movements);
+// displayTotalBalance(account1.movements);
 /////////////////////////////////////////////////
 
 /////////////////////////////////////////////////
@@ -174,7 +174,7 @@ btnLogin.addEventListener('click', function (e) {
     acc => acc.username === inputLoginUsername.value
   );
 
-  console.log(currentAccout);
+  // console.log(currentAccout);
 
   // if the username doesn't match value it will return an error that why we can use optional chaining in the condition
   // if current account is true, mean if the current username exit than it will check for pin
@@ -187,12 +187,17 @@ btnLogin.addEventListener('click', function (e) {
     // but after a successful log in it will show the user interface
     containerApp.style.opacity = 100;
 
+    // clearing input fields 
+    inputLoginUsername.value = '';
+    inputLoginPin.value = '';
+    inputLoginPin.blur();
+
     // Display Movements
     displayMovements(currentAccout.movements);
     // Display Balance
     displayTotalBalance(currentAccout.movements);
     // Display Summary
-    calcDisplaySummary(currentAccout.movements);
+    calcDisplaySummary(currentAccout);
   }
 });
 
