@@ -6,7 +6,7 @@
 
 // Data
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: 'Noah Noah',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
@@ -139,7 +139,7 @@ const calcDisplaySummary = function (movements) {
     .map(deposit => (deposit * 1.2) / 100)
     .filter((interest, i, arr) => {
       // console.log(arr); // check out the array for debugging / understanding this part
-      return interest >= 1; 
+      return interest >= 1;
     })
     .reduce((acc, interest) => acc + interest, 0);
 
@@ -163,17 +163,31 @@ const displayTotalBalance = function (movements) {
 displayTotalBalance(account1.movements);
 /////////////////////////////////////////////////
 
-
 /////////////////////////////////////////////////
 // ============= User log in =================
 
 let currentAccout;
-btnLogin.addEventListener('click', function(e){
+btnLogin.addEventListener('click', function (e) {
   // to prevent the form from submitting
-  e.preventDefault()
-  currentAccout = accounts.find(acc => acc.username === inputLoginUsername.value);
-});
+  e.preventDefault();
+  currentAccout = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
 
+  console.log(currentAccout);
+
+  // if the username doesn't match value it will return an error that why we can use optional chaining in the condition
+  // if current account is true, mean if the current username exit than it will check for pin
+  if (currentAccout?.pin === Number(inputLoginPin.value)) {
+    // Display Ui and message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccout.owner.split(' ')[0]
+    }`;
+    // at first the app class opacity will be 0
+    // but after a successful log in it will show the user interface
+    containerApp.style.opacity = 100;
+  }
+});
 
 /////////////////////////////////////////////////
 
