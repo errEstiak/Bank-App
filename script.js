@@ -74,7 +74,7 @@ const displayMovements = function (movements) {
       i + 1
     }. ${type}</div>
     <div class="movements__date">3 days ago</div>
-    <div class="movements__value">${Math.abs(movs)}</div>
+    <div class="movements__value">${Math.abs(movs)} €</div>
     </div>`;
 
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -82,7 +82,7 @@ const displayMovements = function (movements) {
 };
 
 displayMovements(account1.movements);
-/////////////////////////////////////////////////
+// -------------------------------------------
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -113,7 +113,41 @@ const createUserName = function (accs) {
 
 createUserName(accounts);
 // console.log(accounts);
+// -------------------------------------------
+
 /////////////////////////////////////////////////
+/////////////////////////////////////////////////
+// ============= DISPLAY Summary =================
+
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes} €`;
+
+  const withdraw = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(withdraw)} €`;
+
+  // Lets fix an 1.2% interest for our program on every deposit
+  // suppose bank add an condition recently on interest rate
+  // only if an interest that is bigger than one than it will be added to the total value
+  // so where should we add this in the chai? (yes the ans is in between where we calculating and adding the interest rate)
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((interest, i, arr) => {
+      // console.log(arr); // check out the array for debugging / understanding this part
+      return interest >= 1; 
+    })
+    .reduce((acc, interest) => acc + interest, 0);
+
+  labelSumInterest.textContent = `${interest} €`;
+};
+
+calcDisplaySummary(account1.movements);
+// -------------------------------------------
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -129,7 +163,23 @@ const displayTotalBalance = function (movements) {
 displayTotalBalance(account1.movements);
 /////////////////////////////////////////////////
 
+
 /////////////////////////////////////////////////
+// ============= User log in =================
+
+let currentAccout;
+btnLogin.addEventListener('click', function(e){
+  // to prevent the form from submitting
+  e.preventDefault()
+  currentAccout = accounts.find(acc => acc.username === inputLoginUsername.value);
+});
+
+
+/////////////////////////////////////////////////
+
+// -------------------------------------------
+
+/////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
 
