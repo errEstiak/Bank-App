@@ -250,7 +250,10 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAccount.movements.push(amount);
     updateUi(currentAccout);
     labelTransferWrongMsg.textContent = '';
-  } 
+  } else {
+    labelTransferWrongMsg.textContent = 'Wrong! Try again'
+    labelTransferWrongMsg.style.color = "#A34343";
+  }
 });
 
 // -------------------------------------------
