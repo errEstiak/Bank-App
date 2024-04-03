@@ -6,28 +6,28 @@
 
 // Data
 const account1 = {
-  owner: 'Noah Noah',
-  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  owner: 'Sasuke Uchiha',
+  movements: [200, 450, -400, 3000, -650, -130, 70, 1300, 100000],
   interestRate: 1.2, // %
   pin: 1111,
 };
 
 const account2 = {
-  owner: 'Estiak Dewan',
+  owner: 'Naruto Uzumaki',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
 };
 
 const account3 = {
-  owner: 'Steven Thomas Williams',
+  owner: 'Kakashi Hatake',
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
 };
 
 const account4 = {
-  owner: 'Sarah Smith',
+  owner: 'Hinata Hyuga',
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
@@ -43,6 +43,7 @@ const labelSumIn = document.querySelector('.summary__value--in');
 const labelSumOut = document.querySelector('.summary__value--out');
 const labelSumInterest = document.querySelector('.summary__value--interest');
 const labelTimer = document.querySelector('.timer');
+const labelTransferWrongMsg = document.querySelector('.wrongMsg')
 
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
@@ -60,6 +61,7 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
+// -------------------------------------------
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -153,15 +155,30 @@ const calcDisplaySummary = function (acc) {
 /////////////////////////////////////////////////
 // ============= DISPLAY TOTAL BALANCE =================
 
-const displayTotalBalance = function (movements) {
-  const balance = movements.reduce(function (acc, mov) {
+const displayTotalBalance = function (acc) {
+  const balance = acc.movements.reduce(function (acc, mov) {
     return acc + mov;
   }, 0);
+  // crating balance property for accounts object to hold value
+  acc.balance = balance;
   labelBalance.textContent = `${balance} €`;
 };
 
 // displayTotalBalance(account1.movements);
+// -------------------------------------------
+
 /////////////////////////////////////////////////
+// ============= Update Ui funtion =================
+const updateUi = function (acc) {
+  // Display Movements
+  displayMovements(acc.movements);
+  // Display Balance
+  displayTotalBalance(acc);
+  // Display Summary
+  calcDisplaySummary(acc);
+};
+
+// -------------------------------------------
 
 /////////////////////////////////////////////////
 // ============= User log in =================
@@ -186,35 +203,54 @@ btnLogin.addEventListener('click', function (e) {
     // at first the app class opacity will be 0
     // but after a successful log in it will show the user interface
     containerApp.style.opacity = 100;
+    // containerApp.style.pointerEvents = auto;
+    // containerApp.style.visibility = visible;
 
-    // clearing input fields 
+    // clearing input fields
     inputLoginUsername.value = '';
     inputLoginPin.value = '';
     inputLoginPin.blur();
 
-    // Display Movements
-    displayMovements(currentAccout.movements);
-    // Display Balance
-    displayTotalBalance(currentAccout.movements);
-    // Display Summary
-    calcDisplaySummary(currentAccout);
+    // // Display Movements
+    // displayMovements(currentAccout.movements);
+    // // Display Balance
+    // displayTotalBalance(currentAccout);
+    // // Display Summary
+    // calcDisplaySummary(currentAccout);
+
+    // Resusable function to update Ui
+    updateUi(currentAccout);
   }
 });
 
-/////////////////////////////////////////////////
-
 // -------------------------------------------
 
-/////////////////////////////////////////////
 /////////////////////////////////////////////////
-// LECTURES
+// ============= TRANSFER MONEY =================
 
-// const currencies = new Map([
-//   ['USD', 'United States dollar'],
-//   ['EUR', 'Euro'],
-//   ['GBP', 'Pound sterling'],
-// ]);
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAccount = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
 
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+  inputTransferAmount.value = '';
+  inputTransferTo.value = '';
+  inputTransferAmount.blur();
 
-/////////////////////////////////////////////////
+  if (
+    amount > 0 &&
+    receiverAccount &&
+    currentAccout.balance >= amount &&
+    receiverAccount &&
+    receiverAccount.username !== currentAccout.username
+  ) {
+    currentAccout.movements.push(-amount);
+    receiverAccount.movements.push(amount);
+    updateUi(currentAccout);
+    labelTransferWrongMsg.textContent = '';
+  } 
+});
+
+// -------------------------------------------
